@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyCricketWorldCupTrophyApp());
+}
+
+class MyCricketWorldCupTrophyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Cricket World Cup Trophy'),
+        ),
+        body: Center(
+          child: CricketWorldCupTrophy(),
+        ),
+      ),
+    );
+  }
+}
+
+class CricketWorldCupTrophy extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: TrophyPainter(),
+      size: Size(200, 300), // Adjust the size as needed
+    );
+  }
+}
+
+class TrophyPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.gold // Adjust colors as needed
+      ..style = PaintingStyle.fill;
+
+    // Draw the main body of the trophy
+    final bodyPath = Path()
+      ..moveTo(size.width * 0.2, size.height * 0.1)
+      ..lineTo(size.width * 0.8, size.height * 0.1)
+      ..lineTo(size.width * 0.9, size.height * 0.8)
+      ..lineTo(size.width * 0.1, size.height * 0.8)
+      ..close();
+    canvas.drawPath(bodyPath, paint);
+
+    // Draw the top part of the trophy
+    final topPath = Path()
+      ..moveTo(size.width * 0.2, size.height * 0.1)
+      ..lineTo(size.width / 2, size.height * 0.01)
+      ..lineTo(size.width * 0.8, size.height * 0.1)
+      ..close();
+    canvas.drawPath(topPath, paint);
+
+    // Draw the handles on both sides
+    final handlePath = Path()
+      ..moveTo(size.width * 0.3, size.height * 0.5)
+      ..lineTo(size.width * 0.4, size.height * 0.4)
+      ..lineTo(size.width * 0.6, size.height * 0.4)
+      ..lineTo(size.width * 0.7, size.height * 0.5)
+      ..close();
+    canvas.drawPath(handlePath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}

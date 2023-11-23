@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() {
+  runApp(GuessingGameApp());
+}
+
+class GuessingGameApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: GuessingGameScreen(),
+    );
+  }
+}
+
+class GuessingGameScreen extends StatefulWidget {
+  @override
+  _GuessingGameScreenState createState() => _GuessingGameScreenState();
+}
+
+class _GuessingGameScreenState extends State<GuessingGameScreen> {
+  int targetNumber = Random().nextInt(100) + 1; // Random number between 1 and 100
+  TextEditingController controller = TextEditingController();
+  Color backgroundColor = Colors.white;
+
+  void checkGuess() {
+    int? userGuess = int.tryParse(controller.text);
+    print(targetNumber);
+
+    if (userGuess != null) {
+      setState(() {
+        if (userGuess == targetNumber) {
+          backgroundColor = Colors.blue; // Correct guess
+        } else {
+          backgroundColor = Colors.red; // Incorrect guess
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Guessing Game'),
+      ),
+      body: Container(
+        color: backgroundColor,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Guess the Number (1-100)',
+                style: TextStyle(fontSize: 20.0),
+              ),
+              SizedBox(height: 20.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                child: TextField(
+                  controller: controller,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  checkGuess();
+                },
+                child: Text('Submit Guess'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

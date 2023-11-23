@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyDressApp());
+}
+
+class MyDressApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/details': (context) => DetailsScreen(),
+      },
+    );
+  }
+}
+
+class Dress {
+  final String name;
+  final String description;
+
+  Dress({required this.name, required this.description});
+}
+
+class HomeScreen extends StatelessWidget {
+  final List<Dress> dresses = [
+    Dress(name: 'Casual Dress', description: 'Comfortable and relaxed.'),
+    Dress(name: 'Party Dress', description: 'Elegant for special occasions.'),
+    Dress(name: 'Summer Dress', description: 'Light and breezy for summer.'),
+    // Add more dresses as needed
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dress List'),
+      ),
+      body: ListView.builder(
+        itemCount: dresses.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(dresses[index].name),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/details',
+                arguments: dresses[index],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DetailsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final Dress dress = ModalRoute.of(context)!.settings.arguments as Dress;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dress Details'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Name: ${dress.name}',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              'Description: ${dress.description}',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

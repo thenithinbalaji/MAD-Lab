@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyUnitConverterApp());
+}
+
+class MyUnitConverterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: UnitConverterScreen(),
+    );
+  }
+}
+
+class UnitConverterScreen extends StatefulWidget {
+  @override
+  _UnitConverterScreenState createState() => _UnitConverterScreenState();
+}
+
+class _UnitConverterScreenState extends State<UnitConverterScreen> {
+  TextEditingController fahrenheitController = TextEditingController();
+  TextEditingController celsiusController = TextEditingController();
+
+  void convertTemperature() {
+    if (fahrenheitController.text.isNotEmpty) {
+      double fahrenheit = double.parse(fahrenheitController.text);
+      double celsius = (fahrenheit - 32) * 5 / 9;
+      celsiusController.text = celsius.toStringAsFixed(2);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Temperature Converter'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: fahrenheitController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Enter Temperature (°F)'),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: convertTemperature,
+              child: Text('Convert'),
+            ),
+            SizedBox(height: 20.0),
+            TextField(
+              controller: celsiusController,
+              readOnly: true,
+              decoration: InputDecoration(labelText: 'Converted Temperature (°C)'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

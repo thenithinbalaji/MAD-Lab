@@ -1,0 +1,106 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class NewsService {
+  final String apiKey;
+  final String baseUrl = 'https://newsapi.org/v2/top-headlines';
+
+  NewsService(this.apiKey);
+
+  Future<List<Article>> getTopHeadlines() async {
+    final response = await http.get(Uri.parse('$baseUrl?apiKey=$apiKey'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['status'] == 'ok') {
+        List<Article> articles = (data['articles'] as List)
+            .map((article) => Article.fromJson(article))
+            .toList();
+        return articles;
+      }
+    }
+    throw Exception('Failed to load top headlines');
+  }
+}
+
+class Article {
+  final String title;
+  final String description;
+
+  Article({required this.title, required this.description});
+
+  factory Article.fromJson(Map<String, dynamic> json) {
+    return Article(
+      title: json['title'],
+      description: json['description'],
+    );
+  }
+}
+
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyNewsApp());
+}
+
+class MyNewsApp extends StatelessWidget {
+  final NewsService newsService = NewsService('YOUR_API_KEY');
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: NewsScreen(newsService: newsService),
+    );
+  }
+}
+
+class NewsScreen extends StatefulWidget {
+  final NewsService newsService;
+
+  NewsScreen({required this.newsService});
+
+  @override
+  _NewsScreenState createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  late Future<List<Article>> articles;
+
+  @override
+  void initState() {
+    super.initState();
+    articles = widget.newsService.getTopHeadlines();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Top Headlines'),
+      ),
+      body: FutureBuilder(
+        future: articles,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<Article> articleList = snapshot.data as List<Article>;
+            return ListView.builder(
+              itemCount: articleList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(articleList[index].title),
+                  subtitle: Text(articleList[index].description),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+

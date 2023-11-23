@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:web_browser/web_browser.dart';
+
+void main() {
+  runApp(MyWebBrowserApp());
+}
+
+class MyWebBrowserApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: WebBrowserScreen(),
+    );
+  }
+}
+
+class WebBrowserScreen extends StatelessWidget {
+  final String url = 'https://www.github.com'; // Replace with your desired URL
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Web Browser Example'),
+      ),
+      body: Browser(initialUriString: url,
+      ),
+    );
+  }
+}
+//  webview_flutter: ^4.0.6
+//   web_browser: ^0.7.4

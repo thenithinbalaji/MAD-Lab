@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Primitive Shapes in Flutter'),
+        ),
+        body: CustomShapePainter(),
+      ),
+    );
+  }
+}
+
+class CustomShapePainter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CustomPaint(
+        painter: ShapesPainter(),
+        child: Container(
+          width: 200.0,
+          height: 200.0,
+        ),
+      ),
+    );
+  }
+}
+
+class ShapesPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Draw a red circle
+    Paint circlePaint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(100.0, 100.0), 50.0, circlePaint);
+
+    // Draw a blue rectangle
+    Paint rectPaint = Paint()
+      ..color = Colors.blue
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Rect.fromPoints(Offset(20.0, 30.0), Offset(180.0, 80.0)), rectPaint);
+
+    // Draw a green line
+    Paint linePaint = Paint()
+      ..color = Colors.green
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 5.0;
+    canvas.drawLine(Offset(10.0, 150.0), Offset(190.0, 150.0), linePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}

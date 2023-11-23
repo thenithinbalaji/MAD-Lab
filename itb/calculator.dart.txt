@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(CalculatorApp());
+}
+
+class CalculatorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CalculatorScreen(),
+    );
+  }
+}
+
+class CalculatorScreen extends StatefulWidget {
+  @override
+  _CalculatorScreenState createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  String input = '';
+  String output = '';
+
+  void addToInput(String value) {
+    setState(() {
+      input += value;
+    });
+  }
+
+  void clearInput() {
+    setState(() {
+      input = '';
+      output = '';
+    });
+  }
+
+  void calculateResult() {
+    try {
+      double result = eval(input);
+      setState(() {
+        output = result.toString();
+      });
+    } catch (e) {
+      setState(() {
+        output = 'Error';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Basic Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              input,
+              style: TextStyle(fontSize: 24.0),
+            ),
+            SizedBox(height: 20.0),
+            Text(
+              output,
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildButton('7'),
+                buildButton('8'),
+                buildButton('9'),
+                buildButton('/'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildButton('4'),
+                buildButton('5'),
+                buildButton('6'),
+                buildButton('*'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildButton('1'),
+                buildButton('2'),
+                buildButton('3'),
+                buildButton('-'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildButton('0'),
+                buildButton('C', textColor: Colors.red),
+                buildButton('=', textColor: Colors.green),
+                buildButton('+'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildButton(String label, {Color textColor = Colors.black}) {
+    return ElevatedButton(
+      onPressed: () {
+        if (label == 'C') {
+          clearInput();
+        } else if (label == '=') {
+          calculateResult();
+        } else {
+          addToInput(label);
+        }
+      },
+      child: Text(
+        label,
+        style: TextStyle(fontSize: 20.0, color: textColor),
+      ),
+    );
+  }
+
+  double eval(String expression) {
+    Parser p = Parser();
+    Expression exp = p.parse(expression);
+    ContextModel cm = ContextModel();
+    return exp.evaluate(EvaluationType.REAL, cm);
+  }
+}
+dependencies:
+  math_expressions: ^2.0.1
+

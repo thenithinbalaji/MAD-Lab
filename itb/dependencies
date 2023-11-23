@@ -1,0 +1,10 @@
+  flutter:
+    sdk: flutter
+  geolocator: ^8.1.4
+  math_expressions: ^2.0.1
+  flutter_local_notifications: ^8.2.0
+  http: ^0.13.6
+  dart_rss: ^3.0.1
+  intl: ^0.18.1
+  webview_flutter: ^4.0.6
+  web_browser: ^0.7.4

@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('BMI Calculator'),
+        ),
+        body: BMICalculator(),
+      ),
+    );
+  }
+}
+
+class BMICalculator extends StatefulWidget {
+  @override
+  _BMICalculatorState createState() => _BMICalculatorState();
+}
+
+class _BMICalculatorState extends State<BMICalculator> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  double bmiResult= 0;
+
+  void calculateBMI() {
+    if (weightController.text.isNotEmpty && heightController.text.isNotEmpty) {
+      double weight = double.parse(weightController.text);
+      double height = double.parse(heightController.text) / 100; // convert height to meters
+      double bmi = weight / (height * height);
+
+      setState(() {
+        bmiResult = bmi;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: weightController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: 'Enter Weight (kg)'),
+          ),
+          SizedBox(height: 16.0),
+          TextField(
+            controller: heightController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: 'Enter Height (cm)'),
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: calculateBMI,
+            child: Text('Calculate BMI'),
+          ),
+          SizedBox(height: 16.0),
+          bmiResult != null
+              ? Text(
+            'BMI Result: ${bmiResult.toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          )
+              : Container(),
+        ],
+      ),
+    );
+  }
+}

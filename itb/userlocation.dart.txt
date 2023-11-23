@@ -1,0 +1,78 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sensors/sensors.dart';
+
+void main() {
+  runApp(MySensorApp());
+}
+
+class MySensorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SensorScreen(),
+    );
+  }
+}
+
+class SensorScreen extends StatefulWidget {
+  @override
+  _SensorScreenState createState() => _SensorScreenState();
+}
+
+class _SensorScreenState extends State<SensorScreen> {
+  String locationData = 'Getting location...';
+  String accelerometerData = 'Getting accelerometer data...';
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+    getAccelerometerData();
+  }
+
+  Future<void> getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        locationData = 'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+      });
+    } catch (e) {
+      print('Error getting location: $e');
+      setState(() {
+        locationData = 'Error getting location';
+      });
+    }
+  }
+
+  void getAccelerometerData() {
+    accelerometerEvents.listen((AccelerometerEvent event) {
+      setState(() {
+        accelerometerData = 'X: ${event.x.toStringAsFixed(2)}, Y: ${event.y.toStringAsFixed(2)}, Z: ${event.z.toStringAsFixed(2)}';
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sensor App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Location: $locationData'),
+            SizedBox(height: 20.0),
+            Text('Accelerometer: $accelerometerData'),
+          ],
+        ),
+      ),
+    );
+  }
+}

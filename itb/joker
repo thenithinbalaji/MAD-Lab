@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyJokerApp());
+}
+
+class MyJokerApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Joker Canvas'),
+        ),
+        body: Center(
+          child: JokerCanvas(),
+        ),
+      ),
+    );
+  }
+}
+
+class JokerCanvas extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: JokerPainter(),
+      size: Size(200, 200), // Adjust the size as needed
+    );
+  }
+}
+
+class JokerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.green // Adjust colors as needed
+      ..style = PaintingStyle.fill;
+
+    final faceRadius = size.width / 2;
+    final eyeRadius = faceRadius * 0.15;
+    final mouthWidth = faceRadius * 0.8;
+    final mouthHeight = faceRadius * 0.5;
+
+    // Draw face
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), faceRadius, paint);
+
+    // Draw eyes
+    paint.color = Colors.white;
+    canvas.drawCircle(Offset(size.width * 0.35, size.height * 0.4), eyeRadius, paint);
+    canvas.drawCircle(Offset(size.width * 0.65, size.height * 0.4), eyeRadius, paint);
+
+    // Draw mouth
+    paint.color = Colors.red;
+    final mouthPath = Path()
+      ..moveTo(size.width * 0.2, size.height * 0.65)
+      ..quadraticBezierTo(size.width / 2, size.height * 0.8, size.width * 0.8, size.height * 0.65)
+      ..close();
+    canvas.drawPath(mouthPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}

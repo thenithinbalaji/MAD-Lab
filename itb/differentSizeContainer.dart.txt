@@ -1,0 +1,67 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(ContainerApp());
+}
+
+class ContainerApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ContainerScreen(),
+    );
+  }
+}
+
+class ContainerScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Different Sized Containers App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              color: Colors.red,
+              child: Center(
+                child: Text(
+                  'Small Container',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              width: 200,
+              height: 200,
+              color: Colors.green,
+              child: Center(
+                child: Text(
+                  'Medium Container',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              width: 300,
+              height: 300,
+              color: Colors.blue,
+              child: Center(
+                child: Text(
+                  'Large Container',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

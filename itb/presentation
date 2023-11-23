@@ -1,0 +1,79 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyPresentationApp());
+}
+
+class MyPresentationApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Presentation'),
+        ),
+        body: MyPresentation(),
+      ),
+    );
+  }
+}
+
+class MyPresentation extends StatefulWidget {
+  @override
+  _MyPresentationState createState() => _MyPresentationState();
+}
+
+class _MyPresentationState extends State<MyPresentation> {
+  final PageController _controller = PageController(initialPage: 0);
+  int currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      if (currentPage < 2) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+      _controller.animateToPage(
+        currentPage,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      controller: _controller,
+      children: [
+        Slide(content: 'Slide 1 Content'),
+        Slide(content: 'Slide 2 Content'),
+        Slide(content: 'Slide 3 Content'),
+      ],
+    );
+  }
+}
+
+class Slide extends StatelessWidget {
+  final String content;
+
+  Slide({required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        color: Colors.blue,
+        child: Text(
+          content,
+          style: TextStyle(color: Colors.white, fontSize: 20.0),
+        ),
+      ),
+    );
+  }
+}

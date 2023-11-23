@@ -1,0 +1,87 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(PyramidApp());
+}
+
+class PyramidApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Pyramid App',
+      home: PyramidScreen(),
+    );
+  }
+}
+
+class PyramidScreen extends StatefulWidget {
+  @override
+  _PyramidScreenState createState() => _PyramidScreenState();
+}
+
+class _PyramidScreenState extends State<PyramidScreen> {
+  TextEditingController _controller = TextEditingController();
+  String pyramidOutput = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pyramid App'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Enter the value of n',
+              ),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  pyramidOutput = buildPyramid();
+                });
+              },
+              child: Text('Build Pyramid'),
+            ),
+            SizedBox(height: 20.0),
+            Text(
+              pyramidOutput,
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String buildPyramid() {
+    try {
+      int n = int.parse(_controller.text);
+      String pyramid = '';
+      for (int i = 1; i <= n; i++) {
+        // Add spaces
+        for (int j = 1; j <= n - i; j++) {
+          pyramid += ' ';
+        }
+
+        // Add '*' in increasing order
+        for (int k = 1; k <= 2 * i - 1; k++) {
+          pyramid += '*';
+        }
+
+        // Move to the next line after each row
+        pyramid += '\n';
+      }
+      return pyramid;
+    } catch (e) {
+      return 'Invalid input. Please enter a valid integer.';
+    }
+  }
+}

@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+void main() {
+  runApp(ColorChangeApp());
+}
+
+class ColorChangeApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ColorChangeScreen(),
+    );
+  }
+}
+//int randomRange = (Random().nextDouble() * (max - min) + min).toInt();
+class ColorChangeScreen extends StatefulWidget {
+  @override
+  _ColorChangeScreenState createState() => _ColorChangeScreenState();
+}
+
+class _ColorChangeScreenState extends State<ColorChangeScreen> {
+  Color logoColor = Colors.red;
+
+  void changeColor() {
+    setState(() {
+      // Change the color to a random color
+      logoColor = Colors.primaries[Random().nextInt(Colors.primaries.length)];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Color Change App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 150.0,
+              height: 150.0,
+              color: logoColor,
+              child: Center(
+                child: Text(
+                  'Logo',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: changeColor,
+              child: Text('Change Logo Color'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,148 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyGuessingGameApp());
+}
+
+class MyGuessingGameApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Guessing Game'),
+        ),
+        body: MyGuessingGame(),
+      ),
+    );
+  }
+}
+
+class MyGuessingGame extends StatefulWidget {
+  @override
+  _MyGuessingGameState createState() => _MyGuessingGameState();
+}
+
+class _MyGuessingGameState extends State<MyGuessingGame> {
+  final int targetNumber = 42;
+  int userGuess;
+  int totalGuesses = 0;
+  int maxGuesses = 5;
+  bool gameOver = false;
+  Stopwatch stopwatch = Stopwatch()..start();
+  Color feedbackColor = Colors.white;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Guess the Number (1-100)',
+            style: TextStyle(fontSize: 20.0),
+          ),
+          SizedBox(height: 16.0),
+          TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              setState(() {
+                userGuess = int.tryParse(value);
+              });
+            },
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: gameOver ? null : _checkGuess,
+            child: Text('Submit Guess'),
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            'Feedback',
+            style: TextStyle(fontSize: 18.0),
+          ),
+          Container(
+            width: 100.0,
+            height: 40.0,
+            color: feedbackColor,
+            child: Center(
+              child: Text(
+                _getFeedback(),
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            'Total Guesses: $totalGuesses',
+            style: TextStyle(fontSize: 18.0),
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            'Time Spent: ${stopwatch.elapsed.inSeconds} seconds',
+            style: TextStyle(fontSize: 18.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _checkGuess() {
+    setState(() {
+      totalGuesses++;
+
+      if (userGuess == targetNumber) {
+        feedbackColor = Colors.green;
+        _showFeedback();
+        _gameOver();
+      } else if (userGuess > targetNumber) {
+        feedbackColor = Colors.red;
+        _showFeedback();
+      } else {
+        feedbackColor = Colors.blue;
+        _showFeedback();
+      }
+    });
+  }
+
+  void _gameOver() {
+    gameOver = true;
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        gameOver = false;
+        feedbackColor = Colors.white;
+        _resetGame();
+      });
+    });
+  }
+
+  void _resetGame() {
+    userGuess = null;
+    totalGuesses = 0;
+    stopwatch.reset();
+  }
+
+  String _getFeedback() {
+    if (userGuess == null) {
+      return '';
+    } else if (userGuess == targetNumber) {
+      return 'Correct!';
+    } else if (userGuess > targetNumber) {
+      return 'Too High';
+    } else {
+      return 'Too Low';
+    }
+  }
+
+  void _showFeedback() {
+    Timer(Duration(milliseconds: 20), () {
+      if (!gameOver) {
+        setState(() {
+          feedbackColor = Colors.white;
+        });
+      }
+    });
+  }
+}
